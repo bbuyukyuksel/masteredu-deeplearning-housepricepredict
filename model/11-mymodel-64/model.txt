@@ -1,0 +1,2 @@
+[INFO] avg. house price: ₺943.608,64, std house price: ₺2.108.681,64
+[INFO] mean: 52.01%, std: 42.74%
