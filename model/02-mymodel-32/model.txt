@@ -1,9 +1,0 @@
-[INFO] predicting house prices...
-[INFO] avg. house price: ₺943,608.64, std house price: ₺2,108,681.64
-[INFO] mean: 56.19%, std: 56.29%
-
-CNN, 
-filters=(16, 32, 64, 16, 32, 64),
-epochs=2000,
-batch_size=16,
-Optimizer=Adam(lr=1e-3, decay=1e-3 / 10000)

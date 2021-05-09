@@ -93,3 +93,6 @@ plt.figure(2)
 plt.plot(range(len(history.history["val_loss"])), history.history["val_loss"])
 plt.title("Val Loss")
 plt.savefig(f"model/mymodel-{size}/val_loss.png")
+
+with open(f"model/mymodel-{size}/maxPrice.txt", "w") as f:
+	f.write(str(maxPrice))
