@@ -8,6 +8,8 @@ import numpy as np
 import argparse
 import locale
 import os
+import matplotlib.pyplot as plt
+import cv2
 
 # It can be used to reconstruct the model identically.
 
@@ -18,8 +20,13 @@ ap.add_argument("-d", "--dataset", type=str, required=True,
 	help="path to input dataset of house images")
 ap.add_argument("-m", "--model", type=str, required=True,
 	help="path to model")
+ap.add_argument("-s", "--size", type=int, required=True,
+	help="path to input dataset of house images")
 args = vars(ap.parse_args())
 
+size = args["size"]
+
+# restruct model
 model = keras.models.load_model(args["model"])
 
 # construct the path to the input .txt file that contains information
@@ -32,6 +39,22 @@ df = datasets.load_house_attributes(inputPath)
 # range [0, 1]
 print("[INFO] loading house images...")
 images = datasets.load_house_images(df, args["dataset"])
+
+# Example of a picture
+
+cv2.imshow("test",images[0])
+cv2.waitKey(0)
+
+num_images = 10
+for index in range(0, num_images):
+	plt.subplot(2, (num_images//2), index + 1)
+	plt.imshow(images[index], interpolation='nearest')
+	plt.title(f'{df["price"][index]}')
+	plt.axis('off')
+plt.show()
+
+
+# image normalization
 images = images / 255.0
 
 # partition the data into training and testing splits using 75% of

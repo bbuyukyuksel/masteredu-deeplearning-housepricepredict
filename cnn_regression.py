@@ -16,7 +16,10 @@ import matplotlib.pyplot as plt
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", type=str, required=True,
 	help="path to input dataset of house images")
+ap.add_argument("-s", "--size", type=int, required=True,
+	help="path to input dataset of house images")
 args = vars(ap.parse_args())
+size = args["size"]
 
 # construct the path to the input .txt file that contains information
 # on each house in the dataset and then load the dataset
@@ -27,7 +30,7 @@ df = datasets.load_house_attributes(inputPath)
 # load the house images and then scale the pixel intensities to the
 # range [0, 1]
 print("[INFO] loading house images...")
-images = datasets.load_house_images(df, args["dataset"])
+images = datasets.load_house_images(df, args["dataset"], size=size)
 images = images / 255.0
 
 # partition the data into training and testing splits using 75% of
@@ -46,7 +49,7 @@ testY = testAttrX["price"] / maxPrice
 # using mean absolute percentage error as our loss, implying that we
 # seek to minimize the absolute percentage difference between our
 # price *predictions* and the *actual prices*
-model = models.create_cnn(64, 64, 3, regress=True)
+model = models.create_cnn(size*2, size*2, 3, regress=True)
 opt = Adam(lr=1e-3, decay=1e-3 / 10000)
 model.compile(loss="mean_absolute_percentage_error", optimizer=opt)
 
@@ -79,15 +82,14 @@ print("[INFO] avg. house price: {}, std house price: {}".format(
 	locale.currency(df["price"].std(), grouping=True)))
 print("[INFO] mean: {:.2f}%, std: {:.2f}%".format(mean, std))
 
-model.save("model/mymodel")
+model.save(f"model/mymodel-{size}")
 
 plt.figure(1)
 plt.title("Loss")
 plt.plot(range(len(history.history["loss"])), history.history["loss"])
-plt.savefig("model/mymodel/loss.png")
+plt.savefig(f"model/mymodel-{size}/loss.png")
 
 plt.figure(2)
 plt.plot(range(len(history.history["val_loss"])), history.history["val_loss"])
 plt.title("Val Loss")
-plt.savefig("model/mymodel/val_loss.png")
-
+plt.savefig(f"model/mymodel-{size}/val_loss.png")

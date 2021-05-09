@@ -1,4 +1,6 @@
 __pycache__/
 utils/__pycache__/
-mydataset.old/
 SahibindenDatasetConverter/dataset*/
+mydataset.full/
+mydataset.test/
+mydataset.rar
