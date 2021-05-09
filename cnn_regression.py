@@ -11,6 +11,7 @@ import argparse
 import locale
 import os
 import matplotlib.pyplot as plt
+import codecs
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -51,6 +52,7 @@ testY = testAttrX["price"] / maxPrice
 # price *predictions* and the *actual prices*
 model = models.create_cnn(size*2, size*2, 3, regress=True)
 opt = Adam(lr=1e-3, decay=1e-3 / 10000)
+#opt = SGD(lr=1e-3)
 model.compile(loss="mean_absolute_percentage_error", optimizer=opt)
 
 # train the model
@@ -96,3 +98,9 @@ plt.savefig(f"model/mymodel-{size}/val_loss.png")
 
 with open(f"model/mymodel-{size}/maxPrice.txt", "w") as f:
 	f.write(str(maxPrice))
+
+with codecs.open(f"model/mymodel-{size}/model.txt", "w", "utf-8") as f:
+	f.write("[INFO] avg. house price: {}, std house price: {}\n".format(
+		locale.currency(df["price"].mean(), grouping=True),
+		locale.currency(df["price"].std(), grouping=True)))
+	f.write("[INFO] mean: {:.2f}%, std: {:.2f}%\n".format(mean, std))
